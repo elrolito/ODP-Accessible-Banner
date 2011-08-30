@@ -49,18 +49,31 @@ initBannerImages = function() {
 	bannerTimer = setInterval('changeBanner()', 2000);
 }
 
+var bannerCounter = 0;
+
 // Function to fade in the next banner
 changeBanner = function() {
 	
-	var currentBanner = $('.banner-backgrounds .bg:visible');
+	if (bannerCounter == bannerImages.length) {
+		bannerCounter = 0;
+	} else {
+		bannerCounter++;
+	}
+		
+	var nextBanner = $('.banner-backgrounds .bg').eq(bannerCounter);
 	
+	$(nextBanner).fadeIn(800, function() {
+	
+	});
+	$('.banner-backgrounds .bg').not(nextBanner).fadeOut(800);
+	/*
 	$(currentBanner).next().fadeIn(800, function() {
 		
 		$('.banner-backgrounds .bg:last-child').after($('.banner-backgrounds .bg:first-child').css('display', 'none'));
 		
 		updateBannerControls();
 	});
-	
+	*/
 }
 
 updateBannerControls = function() {
