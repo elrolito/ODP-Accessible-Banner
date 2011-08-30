@@ -3,14 +3,7 @@ var bannerTitlesFr = ['Premières nations', 'Métis', 'Inuit', 'Affaires autocht
 var bannerTextTimer
 
 $(document).ready(function() {
-	/*projekktor('#cn-tower', {
-		autoplay: true,
-		controls: false,
-		loop: true,
-		width: 980,
-		height: 385
-	})*/
-	
+
 	$('#maa-banner').removeClass('no-javascript')
 	
 	$('#maa-banner .banner-overlay').fadeIn(500, function() {
@@ -56,4 +49,8 @@ changeBannerText = function() {
 		clearInterval(bannerTextTimer)
 	}
 	
+}
+
+initBanner = function() {
+	$('#maa-banner').append('<div class="banner-backgrounds"></div>')
 }
