@@ -6,6 +6,11 @@
 	width: 980px;
 }
 
+#banner-fallback {
+	background: url(images/banner-fallback.jpg) no-repeat left top;
+	height: 385px;
+}
+
 #maa-banner * {
 	margin: 0;
 	padding: 0;
@@ -16,9 +21,6 @@
 	left: 0;
 	position: absolute;
 	top: 0;
-}
-#maa-banner .bg:first-child {
-	display: block;
 }
 
 #maa-banner .banner-expand {
@@ -45,6 +47,7 @@
 
 #maa-banner .banner-overlay {
 	background: url(images/banner-overlay.png) no-repeat left top;
+	display: none;
 	height: 385px;
 	position: relative;
 	z-index: 50;
@@ -52,6 +55,7 @@
 
 #maa-banner .text {
 	color: #fff;
+	display: none;
 	font-family: "Myriad Pro", Arial, sans-serif;
 	font-size: 42px;
 	left: 30px;
