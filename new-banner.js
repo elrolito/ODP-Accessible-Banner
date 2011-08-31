@@ -1,5 +1,7 @@
 var bannerImages = ['first-nations.jpg', 'metis.jpg', 'inuit.jpg'];
-var bannerTitles = ['First Nations', 'Métis', 'Inuit'];
+var bannerTitles = new Array();
+
+bannerTitles['english'] = ['First Nations', 'Métis', 'Inuit'];
 
 var bannerTimer = null;
 
@@ -11,23 +13,7 @@ $(document).ready(function() {
 	initBannerImages();
 	
 	// bind click events for dynamically created controls
-	$('.banner-controls a').live('click', function() {
-		
-		// stop current banner timer
-		clearInterval(bannerTimer);
-		
-		// get the selected banner
-		var selectedBanner = $('.banner-backgrounds .bg').eq($(this).attr('rel'));
-		
-		// fade in the selected banner and fadeout rest
-		$(selectedBanner).fadeIn(800, function() {
-			
-			$('.banner-backgrounds .bg').not(this).fadeOut(800);
-			
-			// start up the banner timer
-			bannerTimer = setInterval('changeBanner()', 2000);
-		});
-	});
+	$('.banner-controls a').live('click', updateBannerViaClick);
 });
 
 // Function to dynamically add banner image html
@@ -41,7 +27,7 @@ initBannerImages = function() {
 		
 		// once image is loaded add it to the DOM tree
 		$(banner).load(function() {
-			$('.banner-backgrounds').append($(banner).addClass('bg'));
+			$('.banner-backgrounds').append($(banner).addClass('bg').attr('title', bannerTitles['english'][index]));
 		});
 	});
 	
@@ -53,6 +39,10 @@ initBannerImages = function() {
 changeBanner = function() {
 	
 	var currentBanner = $('.banner-backgrounds .bg:visible');
+	
+	$('.banner-overlay .text').fadeOut(500, function() {
+		$(this).text($(currentBanner).next().attr('title')).fadeIn(500);
+	});
 	
 	$(currentBanner).next().fadeIn(800, function() {
 		
@@ -75,4 +65,28 @@ updateBannerControls = function() {
 		
 		$(this).attr('rel', attr);
 	});
+}
+
+updateBannerViaClick = function() {
+	
+	// stop current banner timer
+	clearInterval(bannerTimer);
+	
+	// get the selected banner
+	var selectedBanner = $('.banner-backgrounds .bg').eq($(this).attr('rel'));
+	
+	$('.banner-overlay .text').stop(true).fadeOut(500, function() {
+		$(this).text($(selectedBanner).attr('title')).fadeIn(500);
+	});
+	
+	// fade in the selected banner and fadeout rest
+	$(selectedBanner).fadeIn(800, function() {
+		
+		$('.banner-backgrounds .bg').not(this).fadeOut(800);
+		
+		// start up the banner timer
+		bannerTimer = setInterval('changeBanner()', 2000);
+	});
+	
+	return false;
 }

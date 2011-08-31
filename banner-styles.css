@@ -22,6 +22,9 @@
 	position: absolute;
 	top: 0;
 }
+#maa-banner .bg:first-child {
+	display: inline;
+}
 
 #maa-banner .banner-expand {
 	background: #226da7 url(images/expand-arrow.png) no-repeat 95% -20px;
@@ -47,7 +50,6 @@
 
 #maa-banner .banner-overlay {
 	background: url(images/banner-overlay.png) no-repeat left top;
-	display: none;
 	height: 385px;
 	position: relative;
 	z-index: 50;
@@ -55,7 +57,6 @@
 
 #maa-banner .text {
 	color: #fff;
-	display: none;
 	font-family: "Myriad Pro", Arial, sans-serif;
 	font-size: 42px;
 	left: 30px;
