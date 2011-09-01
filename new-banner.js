@@ -38,17 +38,19 @@ initBannerImages = function() {
 // Function to fade in the next banner
 changeBanner = function() {
 	
-	var currentBanner = $('.banner-backgrounds .bg:visible');
+	var nextBanner = $('.banner-backgrounds .bg:visible').next();
 	
-	$('.banner-overlay .text').fadeOut(500, function() {
-		$(this).text($(currentBanner).next().attr('title')).fadeIn(500);
-	});
+	clearInterval(bannerTimer);
 	
-	$(currentBanner).next().fadeIn(800, function() {
+	updateBannerText(nextBanner);
+	
+	$(nextBanner).fadeIn(800, function() {
 		
 		$('.banner-backgrounds .bg:last-child').after($('.banner-backgrounds .bg:first-child').css('display', 'none'));
 		
 		updateBannerControls();
+		
+		bannerTimer = setInterval('changeBanner()', 2000);
 	});
 	
 }
@@ -72,21 +74,32 @@ updateBannerViaClick = function() {
 	// stop current banner timer
 	clearInterval(bannerTimer);
 	
+	// stop current animation and clear queue
+	$('.banner-backgrounds .bg').stop(true);
+	
 	// get the selected banner
 	var selectedBanner = $('.banner-backgrounds .bg').eq($(this).attr('rel'));
 	
-	$('.banner-overlay .text').stop(true).fadeOut(500, function() {
-		$(this).text($(selectedBanner).attr('title')).fadeIn(500);
-	});
+	updateBannerText(selectedBanner);
 	
 	// fade in the selected banner and fadeout rest
 	$(selectedBanner).fadeIn(800, function() {
 		
-		$('.banner-backgrounds .bg').not(this).fadeOut(800);
 		
-		// start up the banner timer
-		bannerTimer = setInterval('changeBanner()', 2000);
 	});
 	
+	$('.banner-backgrounds .bg').not(this).fadeOut(800);
+	
+	// start up the banner timer
+	bannerTimer = setInterval('changeBanner()', 2000);
+	
 	return false;
+}
+
+updateBannerText = function(banner) {
+
+	$('.banner-overlay .text').fadeOut(500, function() {
+		$(this).text($(banner).attr('title')).fadeIn(500);
+	});
+
 }
