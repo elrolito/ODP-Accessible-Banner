@@ -16,6 +16,10 @@
 	padding: 0;
 }
 
+#maa-banner .banner-backgrounds {
+	height: 185px;
+}
+
 #maa-banner .bg {
 	display: none;
 	left: 0;
@@ -29,7 +33,6 @@
 #maa-banner .banner-expand {
 	background: #226da7 url(images/expand-arrow.png) no-repeat 95% -20px;
 	color: #fff;
-	display: none;
 	font-family: Verdana, sans-serif;
 	font-size: 10px;
 	height: 24px;
@@ -52,6 +55,7 @@
 	background: url(images/banner-overlay.png) no-repeat left top;
 	height: 385px;
 	position: relative;
+	top: -185px;
 	z-index: 50;
 }
 
@@ -147,6 +151,41 @@
 #maa-banner .banner-links .imoe-link {
 	background-image: url(images/imoe-link.jpg);
 }
+
+#maa-banner .banner-controls {
+	font: 10px/2.5 Verdana, Arial, sans-serif;
+	position: absolute;
+	left: 5px;
+	top: 162px;
+	width: 200px;
+	text-transform: uppercase;
+	z-index: 100;
+}
+
+#maa-banner .banner-controls a {
+	background: #226da7;
+	color: #fff;
+	padding: 5px;
+	text-decoration: none;
+}
+
+#maa-banner .banner-controls a.active,
+#maa-banner .banner-controls a:hover,
+#maa-banner .banner-expand:hover {
+	background-color: #999;
+	background-color: rgba(156,156,156,0.8);
+}
+
+#maa-banner .banner-controls div {
+	float: left;
+}
+
+#maa-banner .banner-controls li {
+	float: left;
+	list-style: none;
+	margin-right: 4px;
+}
+
 
 #cn-tower {
 	background: #000;

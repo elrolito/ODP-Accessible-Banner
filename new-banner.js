@@ -1,7 +1,7 @@
-var bannerImages = ['first-nations.jpg', 'metis.jpg', 'inuit.jpg'];
+var bannerImages = ['first-nations.jpg', 'metis.jpg', 'inuit.jpg', 'imoe.jpg'];
 var bannerTitles = new Array();
 
-bannerTitles['english'] = ['First Nations', 'Métis', 'Inuit'];
+bannerTitles['english'] = ['First Nations', 'Métis', 'Inuit', 'Aboriginal Affairs'];
 
 var bannerTimer = null;
 
@@ -12,24 +12,46 @@ $(document).ready(function() {
 	// Add additional banner images
 	initBannerImages();
 	
+	$('#banner-pause').click(function() {
+		$(this).toggleClass('paused');
+		pausePlayBanner();
+		return false;
+	});
+	
 	// bind click events for dynamically created controls
-	$('.banner-controls a').live('click', function() {
+	$('.banner-controls ul a').live('click', function() {
 		// stop current banner timer
 		clearInterval(bannerTimer);
 		
-		// stop current animation and clear queue
-		//$('.banner-backgrounds .bg').stop(true, true);
-		
-		var bannerIndex = $('.banner-controls a').index(this);
+		var bannerIndex = $('.banner-controls ul a').index(this);
 		
 		changeBanner(bannerIndex);
 				
+		return false;
+	});
+	
+	$('#maa-banner .banner-expand').click(function() {
+		$(this).toggleClass('open');
+		
+		var closeText = $('#maa-banner').hasClass('french') ? 'Fermer' : 'Close';
+		var openText = $('#maa-banner').hasClass('french') ? 'Agrandir' : 'Expand';
+		
+		if ($('#maa-banner .banner-expand').hasClass('open')) {
+			$('#maa-banner .banner-expand').text(closeText);
+		} else {
+			$('#maa-banner .banner-expand').text(openText);
+		}
+		$('#maa-banner').animate({
+			'height': $('#maa-banner .banner-expand').hasClass('open') ? 385 : 185
+		},600)
 		return false;
 	});
 });
 
 // Function to dynamically add banner image html
 initBannerImages = function() {
+	
+	$('.banner-controls ul a').eq(0).addClass('active');
 	
 	// add each banner from the array
 	$(bannerImages).each(function(index, image) {
@@ -38,6 +60,9 @@ initBannerImages = function() {
 		banner.src = 'images/' + image;
 		
 		$('.banner-backgrounds').append($(banner).addClass('bg').attr('title', bannerTitles['english'][index]));
+		
+		// add controls
+		$('.banner-controls ul').append('<li><a href="#">' + (index + 2) + '</a></li>');
 	});
 	
 	// Add class to first banner image
@@ -74,12 +99,15 @@ changeBanner = function(bannerIndex) {
 	
 	updateBannerText(nextBanner);
 	
-	$(nextBanner).fadeIn(800, function() {
+	$(nextBanner).stop(true).fadeIn(800, function() {
 		$(this).addClass('showing');	
 		bannerTimer = setInterval('bannerTimerHandler()', 5000);
 	});
 	
 	$('.banner-backgrounds .bg').not(nextBanner).fadeOut(600);
+	
+	$('.banner-controls ul a').removeClass('active');
+	$('.banner-controls ul a').eq(bannerIndex).toggleClass('active');
 }
 
 updateBannerText = function(banner) {
@@ -87,5 +115,21 @@ updateBannerText = function(banner) {
 	$('.banner-overlay .text').fadeOut(500, function() {
 		$(this).text($(banner).attr('title')).fadeIn(500);
 	});
+	if ($('#banner-pause').text() == 'play') {
+		$('#banner-pause').text('pause')
+	}
 
+}
+
+pausePlayBanner = function() {
+	var pButton = $('#banner-pause');
+	if ($(pButton).text() == 'play') {
+		// start banner timer again
+		bannerTimer = setInterval('bannerTimerHandler()', 5000);
+		$(pButton).text('pause');
+	} else {
+		// stop timer
+		clearInterval(bannerTimer);
+		$(pButton).text('play');
+	}
 }
