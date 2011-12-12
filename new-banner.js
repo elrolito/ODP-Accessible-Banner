@@ -1,3 +1,8 @@
+/* 
+ * MAA website banner javascript code
+ * @author Rolando Henry, New Media Specialist
+ *
+ */
 var bannerImages = ['first-nations.jpg', 'metis.jpg', 'inuit.jpg', 'imoe.jpg'];
 var bannerTitles = new Array();
 

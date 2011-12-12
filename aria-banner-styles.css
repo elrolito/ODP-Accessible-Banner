@@ -3,6 +3,13 @@
  * @author Rolando Henry, New Media Specialist
  *
  */
+ .accessible { 
+position:absolute;
+left:-10000px;
+top:auto;
+width:1px;
+height:1px;
+overflow:hidden;}
 #maa-banner {
 	height: 185px;
 	margin: 0 auto;
@@ -21,7 +28,7 @@
 	padding: 0;
 }
 
-#maa-banner .banner-backgrounds {
+#maa-banner #banner-backgrounds {
 	height: 185px;
 }
 
@@ -40,6 +47,7 @@
 	color: #fff;
 	font-family: Verdana, sans-serif;
 	font-size: 10px;
+	font-weight: 700;
 	height: 24px;
 	line-height: 2.5;
 	padding: 0 25px 0 5px;
@@ -50,6 +58,9 @@
 	top: 162px;
 	width: 80px;
 	z-index: 60;
+	border-radius: 5px 5px 0 0;
+	-moz-border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
 }
 
 #maa-banner .open {
@@ -66,7 +77,7 @@
 
 #maa-banner .text {
 	color: #fff;
-	font-family: "Myriad Pro", Arial, sans-serif;
+	font-family: 'Helvetica Neue', Arial, Verdana, sans-serif;
 	font-size: 42px;
 	left: 30px;
 	line-height: 1;
@@ -87,7 +98,7 @@
 
 #maa-banner .banner-links {
 	color: #fff;
-	font: 13px/1 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font: 13px/1 Verdana, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-weight: 300;
 	list-style: none;
 	margin: 0 0 0 140px;
@@ -138,7 +149,7 @@
 	background: url(images/expand-arrow.png) no-repeat 167px -52px;
 	display: block;
 	padding: 0 3px;
-	width: 100%;
+	width: 96%;
 }
 
 #maa-banner .banner-links .link1 {
@@ -157,7 +168,7 @@
 	background-image: url(images/imoe-link.jpg);
 }
 
-#maa-banner .banner-controls {
+#maa-banner #banner-controls {
 	font: 10px/2.5 Verdana, Arial, sans-serif;
 	position: absolute;
 	left: 5px;
@@ -167,30 +178,30 @@
 	z-index: 100;
 }
 
-#maa-banner .banner-controls a {
+#maa-banner #banner-controls a {
 	background: #226da7;
 	color: #fff;
 	padding: 5px;
 	text-decoration: none;
 }
 
-#maa-banner .banner-controls a.active,
-#maa-banner .banner-controls a:hover,
+#maa-banner #banner-controls a.active,
+#maa-banner #banner-controls a:hover,
 #maa-banner .banner-expand:hover {
 	background-color: #999;
 	background-color: rgba(156,156,156,0.8);
 }
 
-#maa-banner .banner-controls div {
+#maa-banner #banner-controls div {
 	float: left;
 }
 
-#maa-banner .banner-controls li {
+#maa-banner #banner-controls li {
 	float: left;
 	list-style: none;
 	margin-right: 4px;
 }
-
+S
 
 #cn-tower {
 	background: #000;
