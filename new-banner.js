@@ -4,9 +4,11 @@
  *
  */
 var bannerImages = ['first-nations.jpg', 'metis.jpg', 'inuit.jpg', 'imoe.jpg'];
+var bannerLinks = ['default', 'default', 'default', 'default', 'imoe']; // additional default for base banner in html
 var bannerTitles = new Array();
 
 bannerTitles['english'] = ['First Nations', 'Métis', 'Inuit', 'Aboriginal Affairs'];
+bannerTitles['francais'] = ['Premières nations', 'Métis', 'Inuit', 'Affaires autochtones'];
 
 var bannerTimer = null;
 
@@ -56,6 +58,8 @@ $(document).ready(function() {
 // Function to dynamically add banner image html
 initBannerImages = function() {
 	
+	var bannerLanguage = $('#maa-banner').attr('lang');
+	
 	$('.banner-controls ul a').eq(0).addClass('active');
 	
 	// add each banner from the array
@@ -64,7 +68,7 @@ initBannerImages = function() {
 		var banner = new Image();
 		banner.src = 'images/' + image;
 		
-		$('.banner-backgrounds').append($(banner).addClass('bg').attr('title', bannerTitles['english'][index]));
+		$('.banner-backgrounds').append($(banner).addClass('bg').attr('title', bannerTitles[bannerLanguage][index]));
 		
 		// add controls
 		$('.banner-controls ul').append('<li><a href="#">' + (index + 2) + '</a></li>');
@@ -113,6 +117,12 @@ changeBanner = function(bannerIndex) {
 	
 	$('.banner-controls ul a').removeClass('active');
 	$('.banner-controls ul a').eq(bannerIndex).toggleClass('active');
+	
+	var bannerLinkType = bannerLinks[bannerIndex];
+	if (bannerLinkType != $('.banner-links:visible').attr('rel')) {
+		$('.banner-links').fadeOut(800);
+		$('.banner-bottom [rel=' + bannerLinkType + ']').fadeIn(800);
+	}
 }
 
 updateBannerText = function(banner) {
