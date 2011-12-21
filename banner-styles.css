@@ -203,3 +203,6 @@
 .imoe-line {
 	border-top: 3px solid;
 }
+.hide {
+	display: none;
+}
