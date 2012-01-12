@@ -3,11 +3,11 @@
  * @author Rolando Henry, New Media Specialist
  *
  */
-var bannerImages = ['first-nations.jpg', 'metis.jpg', 'inuit.jpg', 'imoe.jpg'];
-var bannerLinks = ['default', 'default', 'default', 'default', 'imoe']; // additional default for base banner in html
+var bannerImages = ['first-nations.jpg', 'metis.jpg', 'inuit.jpg', 'imoe.jpg', 'ocad-artists.jpg'];
+var bannerLinks = ['default', 'default', 'default', 'default', 'imoe', 'ocad']; // additional default for base banner in html
 var bannerTitles = new Array();
 
-bannerTitles['english'] = ['First Nations', 'Métis', 'Inuit', 'Aboriginal Affairs'];
+bannerTitles['english'] = ['First Nations', 'Métis', 'Inuit', 'Aboriginal Affairs', 'Featured Artists'];
 bannerTitles['francais'] = ['Premières nations', 'Métis', 'Inuit', 'Affaires autochtones'];
 
 var bannerTimer = null;
