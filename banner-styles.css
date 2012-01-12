@@ -64,15 +64,18 @@
 	z-index: 50;
 }
 
+#maa-banner .banner-overlay:hover {
+	cursor: pointer;
+}
+
 #maa-banner .text {
 	color: #fff;
-	font-family: "Myriad Pro", Arial, sans-serif;
-	font-size: 42px;
-	left: 30px;
-	line-height: 1;
+	left: 25px;
 	position: absolute;
-	top: 65px;
+	text-shadow: 1px 1px 4px rgba(4, 4, 4, 0.8);
+	top: 62px;
 	width: 200px;
+	font: 40px/1 "Myriad Pro", Arial, sans-serif;
 }
 
 #maa-banner .banner-bottom {
@@ -158,6 +161,9 @@
 }
 #maa-banner .banner-links .ocad-link {
 	background-image: url(images/ocad-link.jpg);
+}
+#maa-banner .banner-links .naaf-link {
+	background-image: url(images/naaf-thumb-link.jpg);
 }
 
 #maa-banner .banner-controls {

@@ -3,12 +3,12 @@
  * @author Rolando Henry, New Media Specialist
  *
  */
-var bannerImages = ['first-nations.jpg', 'metis.jpg', 'inuit.jpg', 'imoe.jpg', 'ocad-artists.jpg'];
-var bannerLinks = ['default', 'default', 'default', 'default', 'imoe', 'ocad']; // additional default for base banner in html
+var bannerImages = ['imoe.jpg', 'ocad-artists.jpg', 'naaf-banner.jpg'];
+var bannerLinks = ['default', 'imoe', 'ocad', 'naaf']; // additional default for base banner in html
 var bannerTitles = new Array();
 
-bannerTitles['english'] = ['First Nations', 'Métis', 'Inuit', 'Aboriginal Affairs', 'Featured Artists'];
-bannerTitles['francais'] = ['Premières nations', 'Métis', 'Inuit', 'Affaires autochtones'];
+bannerTitles['english'] = ['Aboriginal Youth', 'Featured Artists', 'Scholarships & Bursaries'];
+bannerTitles['francais'] = ['Premières nations', 'Affaires autochtones'];
 
 var bannerTimer = null;
 
@@ -118,6 +118,7 @@ changeBanner = function(bannerIndex) {
 	$('.banner-controls ul a').removeClass('active');
 	$('.banner-controls ul a').eq(bannerIndex).toggleClass('active');
 	
+	// change the bottom links for related banner
 	var bannerLinkType = bannerLinks[bannerIndex];
 	if (bannerLinkType != $('.banner-links:visible').attr('rel')) {
 		$('.banner-links').fadeOut(800);
