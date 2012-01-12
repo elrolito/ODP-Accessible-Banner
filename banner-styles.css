@@ -31,8 +31,8 @@
 	position: absolute;
 	top: 0;
 }
-#maa-banner .bg:first-child {
-	display: inline;
+#maa-banner img.default {
+	display: block;
 }
 
 #maa-banner .banner-expand {
@@ -64,15 +64,18 @@
 	z-index: 50;
 }
 
+#maa-banner .banner-overlay:hover {
+	cursor: pointer;
+}
+
 #maa-banner .text {
 	color: #fff;
-	font-family: "Myriad Pro", Arial, sans-serif;
-	font-size: 42px;
-	left: 30px;
-	line-height: 1;
+	left: 25px;
 	position: absolute;
-	top: 65px;
-	width: 100px;
+	text-shadow: 1px 1px 4px rgba(4, 4, 4, 0.8);
+	top: 62px;
+	width: 200px;
+	font: 40px/1 "Myriad Pro", Arial, sans-serif;
 }
 
 #maa-banner .banner-bottom {
@@ -99,12 +102,12 @@
 	margin-right: 25px;
 }
 
-#maa-banner .banner-links .imoe-info {
+#maa-banner .banner-links .info {
 	font-size: 16px;
 	padding: 20px 50px 0 0;
 	width: 549px;
 }
-#maa-banner .banner-links .imoe-info p {
+#maa-banner .banner-links .info p {
 	margin-bottom: 10px;
 }
 
@@ -156,6 +159,12 @@
 #maa-banner .banner-links .imoe-link {
 	background-image: url(images/imoe-link.jpg);
 }
+#maa-banner .banner-links .ocad-link {
+	background-image: url(images/ocad-link.jpg);
+}
+#maa-banner .banner-links .naaf-link {
+	background-image: url(images/naaf-thumb-link.jpg);
+}
 
 #maa-banner .banner-controls {
 	font: 10px/2.5 Verdana, Arial, sans-serif;
@@ -196,10 +205,13 @@
 	background: #000;
 }
 
-.imoe-title {
+.info-title {
 	font-size: 18px;
 	text-transform: uppercase;
 }
 .imoe-line {
 	border-top: 3px solid;
+}
+.hide {
+	display: none;
 }
