@@ -235,7 +235,7 @@ changeBanner = function(bannerIndex) {
 	
 	updateBannerText(nextBanner);
 	
-	$(nextBanner).stop(true).fadeIn(800, function() {
+	$(nextBanner).stop(true).fadeIn(600, function() {
 	
 		$(this).addClass('showing');
 		
@@ -261,17 +261,17 @@ changeBanner = function(bannerIndex) {
 	} else {
 		// adjusted to not include the fallback banner
 		expandedContent = banners[bannerIndex - 1]['expandedContent'];
+		
 	}
 	
 	// toggle banners associated bottom bar content
 	if (expandedContent != $('.banner-content:visible').attr('rel')) {
 	
-		$('.banner-content').fadeOut(600);
+		$('.banner-content').fadeOut(300);
 		
-		$('#banner-bottom [rel=' + expandedContent + ']').fadeIn(600);
+		$('#banner-bottom [rel=' + expandedContent + ']').fadeIn(300);
 		
 	}
-	
 }
 
 // update banner title from title attribute
