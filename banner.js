@@ -6,7 +6,7 @@
 
 /* Banner Config
  * array of banner objects:
- *     { image: path, link: path, bottomBar: name, title: { english: string, francais: string } }
+ *     { image: path, link: path, expandedContent: name, title: { english: string, francais: string } }
  * 
  * note: does not include fallback banner, which is contained in the html
 */
@@ -14,28 +14,28 @@ var banners = [
 	{
 		image: 'images/imoe.jpg',
 		link: 'youth/youth.asp',
-		bottomBar: 'imoe',
+		expandedContent: 'imoe',
 		title: {
 			english: 'Aboriginal Youth',
-			francais: '',
+			francais: 'les jeunes autochtones',
 		}
 	},
 	{
 		image: 'images/ocad-artists.jpg',
 		link: 'arthistory/artists/artists.asp',
-		bottomBar: 'ocad',
+		expandedContent: 'ocad',
 		title: {
 			english: 'Featured Artists',
-			francais: '',
+			francais: 'Artistes en vedette',
 		}
 	},
 	{
 		image: 'images/naaf-banner.jpg',
 		link: 'youth/youth.asp',
-		bottomBar: 'naaf',
+		expandedContent: 'naaf',
 		title: {
 			english: 'Aboriginal Achievement',
-			francais: '',
+			francais: 'réalisations autochtones',
 		}
 	},
 ];
@@ -44,29 +44,47 @@ var banners = [
 var bannerTimer = null;
 
 // default time in ms to show banner
-var bannerTimeAmount = 5000;
+var bannerTimeDelay = 6000;
 
 // default banner language
 var bannerLang = 'english';
 
+// default play/pause text
+var controlText = {
+	english: {
+		play: 'Play',
+		pause: 'Pause',
+		expand: 'Expand',
+		close: 'Close',
+	},
+	francais: {
+		play: 'Jouer',
+		pause: 'Pause',
+		expand: 'Agrandir',
+		close: 'Fermer',
+	}
+}
+
 // initialize the banner
 $(document).ready(function() {
 
+	// check current banner language
+	bannerLang = $('#home-banner').first().attr('lang');
+	
 	// initialize additional banner images
 	initBannerImages();
 	
 	// initialize banner events
 	initBannerEvents();
-
+	
+	// show banner controls
+	$('#banner-controls').find('ul').find('a').first().addClass('active');
+	$('#banner-controls').fadeIn(600);
+	
 });
 
 // Function to dynamically add banner image html
 initBannerImages = function() {
-	
-	// check current banner language
-	bannerLang = $('#maa-banner').attr('lang');
-	
-	$('.banner-controls ul a').eq(0).addClass('active');
 	
 	// add each banner from the array
 	$(banners).each(function(index, banner) {
@@ -74,17 +92,19 @@ initBannerImages = function() {
 		var bannerImage = new Image();
 		bannerImage.src = banner.image;
 		
-		$('.banner-backgrounds').append($(bannerImage).addClass('bg').attr('title', banner.title[bannerLang]));
+		$('#banner-backgrounds').append($(bannerImage).addClass('bg-image').attr('title', banner.title[bannerLang]));
 		
 		// add controls
-		$('.banner-controls ul').append('<li><a href="#">' + (index + 2) + '</a></li>');
+		$('#banner-controls').find('ul').append('<li><a href="#"><span class="accessible">go to slide</span>' + (index + 2) + '</a></li>');
+		
 	});
 	
 	// Add class to first banner image
-	$('.banner-backgrounds .bg:first-child').addClass('showing');
+	$('#banner-backgrounds').find('.bg-image').first().addClass('showing');
 	
 	// Start the banner timer
 	startBannerTimer();
+	
 }
 
 // all the banner events
@@ -98,67 +118,93 @@ initBannerEvents = function() {
 		pausePlayBanner();
 		
 		return false;
+		
 	});
 	
 	// bind click events for dynamically created controls
-	$('.banner-controls ul a').live('click', function() {
+	$('#banner-controls').find('ul').find('a').live('click', function() {
 		
 		// stop current banner timer
 		clearInterval(bannerTimer);
 		
-		var bannerIndex = $('.banner-controls ul a').index(this);
+		var controlIndex = $('#banner-controls').find('ul').find('a').index(this);
 		
-		changeBanner(bannerIndex);
+		changeBanner(controlIndex);
 				
 		return false;
+		
 	});
 	
 	// toggle the bottom bar
-	$('#maa-banner .banner-expand').click(function() {
+	$('#home-banner .banner-expand').click(function() {
 		
-		$(this).toggleClass('open');
+		$(this).toggleClass('expanded');
 		
-		var closeText = $('#maa-banner').hasClass('french') ? 'Fermer' : 'Close';
-		var openText = $('#maa-banner').hasClass('french') ? 'Agrandir' : 'Expand';
+		var expandButton = $('#home-banner .banner-expand');
 		
-		if ($('#maa-banner .banner-expand').hasClass('open')) {
-			$('#maa-banner .banner-expand').text(closeText);
+		if ($(expandButton).hasClass('expanded')) {
+			
+			$('#home-banner #banner-bottom').css('display', 'block');
+			
+			$(expandButton).text(controlText[bannerLang].close);
+			
 		} else {
-			$('#maa-banner .banner-expand').text(openText);
+		
+			$(expandButton).text(controlText[bannerLang].expand);
+			
 		}
-		$('#maa-banner').animate({
-			'height': $('#maa-banner .banner-expand').hasClass('open') ? 385 : 185
-		},600)
+		
+		$('#home-banner').animate({
+		
+			'height': $(expandButton).hasClass('expanded') ? 385 : 185
+			
+		}, 600, 'swing', function() {
+			
+			if ($(expandButton).hasClass('expanded')) {
+				
+				$(expandButton).attr("aria-expanded","true"); // add aria: this tells the browser / screen reader this area is expanded
+			} else {
+				$(expandButton).attr("aria-expanded","false"); // aria closed
+				$('#home-banner #banner-bottom').css('display', 'none'); // hide bottom area do that it can't be tabbed to when closed (for browsers who snap-shot the page the banner is shown at first)
+			}
+			
+		});
+		
 		return false;
+		
 	});
 	
 	// when banner is clicked, go to associated link
 	$('.banner-overlay').click(function() {
 		
-		var bannerIndex = $('.banner-backgrounds .bg').index($('.banner-backgrounds .showing'));
+		var bannerIndex = getCurrentBanner();
 		
 		if (bannerIndex > 0) {
 			
 			var url = '/' + bannerLang + '/' + banners[bannerIndex - 1].link;
 			alert(url);
-			window.open(url);
+			window.expanded(url);
 		}
+		
 	});
 	
 	// pause timer while using the bottom bar
-	$('.banner-bottom').bind('mouseenter', function() {
+	$('#banner-bottom').bind('mouseenter', function() {
 		// turn animation off
 		clearInterval(bannerTimer);
+		
 	}).bind('mouseleave', function() {
 		// turn animation back on
 		clearInterval(bannerTimer);
 		startBannerTimer();
+		
 	});
 }
 
 startBannerTimer = function() {
 	// set banner timer interval
-	bannerTimer = setInterval('bannerTimerHandler()', bannerTimeAmount);
+	bannerTimer = setInterval('bannerTimerHandler()', bannerTimeDelay);
+	
 }
 
 // bannerTimer interval handler
@@ -166,67 +212,83 @@ bannerTimerHandler = function() {
 	
 	clearInterval(bannerTimer);
 	
-	var bannerIndex = $('.banner-backgrounds .bg').index($('.banner-backgrounds .showing'));
+	var bannerIndex = getCurrentBanner();
 	
 	if (bannerIndex == banners.length) {
-		// increase counter to go to next banner
+		// reset to beginning
 		bannerIndex = 0;
 	} else {
-		// reset to begining
+		// increase counter to go to next banner
 		bannerIndex++;
 	}
 	
 	changeBanner(bannerIndex);
+	
+}
+
+// return currently showing banner index
+getCurrentBanner = function() {
+	
+	return $('#banner-backgrounds').find('.bg-image').index($('#banner-backgrounds .showing'));
+	
 }
 
 // Function to fade in the next banner
 changeBanner = function(bannerIndex) {
 	
-	var currentBanner = $('.banner-backgrounds .showing');
-	var nextBanner = $('.banner-backgrounds .bg').eq(bannerIndex);
+	var currentBanner = $('#banner-backgrounds').find('.showing');
+	var nextBanner = $('#banner-backgrounds').find('.bg-image').eq(bannerIndex);
 	
 	$(currentBanner).removeClass('showing');
 	
 	updateBannerText(nextBanner);
 	
 	$(nextBanner).stop(true).fadeIn(800, function() {
+	
 		$(this).addClass('showing');	
 		startBannerTimer();
+		
 	});
 	
-	$('.banner-backgrounds .bg').not(nextBanner).fadeOut(600);
+	$('#banner-backgrounds').find('.bg-image').not(nextBanner).fadeOut(600);
 	
-	$('.banner-controls ul a').removeClass('active');
-	$('.banner-controls ul a').eq(bannerIndex).toggleClass('active');
+	$('#banner-controls').find('ul').find('a').removeClass('active');
+	$('#banner-controls').find('ul').find('a').eq(bannerIndex).toggleClass('active');
 	
 	// change the bottom links for related banner
 	if (bannerIndex == 0) {
 		// fallback banner from html
-		bottomBar = 'default';
+		expandedContent = 'default';
+		
 	} else {
 		// adjusted to not include the fallback banner
-		bottomBar = banners[bannerIndex - 1]['bottomBar'];
+		expandedContent = banners[bannerIndex - 1]['expandedContent'];
 	}
 	
 	// toggle banners associated bottom bar content
-	if (bottomBar != $('.banner-links:visible').attr('rel')) {
-		$('.banner-links').fadeOut(600);
-		$('.banner-bottom [rel=' + bottomBar + ']').fadeIn(600);
+	if (expandedContent != $('.banner-content:visible').attr('rel')) {
+	
+		$('.banner-content').fadeOut(600);
+		$('#banner-bottom [rel=' + expandedContent + ']').fadeIn(600);
+		
 	}
+	
 }
 
 // update banner title from title attribute
 updateBannerText = function(banner) {
 
-	$('.banner-overlay .text').fadeOut(500, function() {
+	$('.banner-overlay .banner-text').fadeOut(500, function() {
 	
 		$(this).text($(banner).attr('title')).fadeIn(500);
+		
 	});
 	
 	// toggle text
-	if ($('#banner-pause').text() == 'play') {
+	if ($('#banner-pause').text() == controlText[bannerLang].play) {
 	
-		$('#banner-pause').text('pause')
+		$('#banner-pause').text(controlText[bannerLang].pause);
+		
 	}
 
 }
@@ -236,13 +298,18 @@ pausePlayBanner = function() {
 	
 	var pButton = $('#banner-pause');
 	
-	if ($(pButton).text() == 'play') {
+	if ($(pButton).text() == controlText[bannerLang].play) {
 		// start banner timer again
 		bannerTimer = setInterval('bannerTimerHandler()', 5000);
-		$(pButton).text('pause');
+		
+		$(pButton).text(controlText[bannerLang].pause);
+		
 	} else {
 		// stop timer
 		clearInterval(bannerTimer);
-		$(pButton).text('play');
+		
+		$(pButton).text(controlText[bannerLang].play);
+		
 	}
+	
 }

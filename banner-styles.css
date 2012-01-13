@@ -3,7 +3,7 @@
  * @author Rolando Henry, New Media Specialist
  *
  */
-#maa-banner {
+#home-banner {
 	height: 185px;
 	margin: 0 auto;
 	overflow: hidden;
@@ -11,31 +11,27 @@
 	width: 980px;
 }
 
-#banner-fallback {
-	background: url(images/banner-fallback.jpg) no-repeat left top;
-	height: 385px;
-}
-
-#maa-banner * {
+#home-banner * {
 	margin: 0;
 	padding: 0;
 }
 
-#maa-banner .banner-backgrounds {
+#home-banner #banner-backgrounds {
 	height: 185px;
 }
 
-#maa-banner .bg {
+#home-banner .bg-image {
 	display: none;
 	left: 0;
 	position: absolute;
 	top: 0;
 }
-#maa-banner img.default {
+
+#home-banner .default-image {
 	display: block;
 }
 
-#maa-banner .banner-expand {
+#home-banner .banner-expand {
 	background: #226da7 url(images/expand-arrow.png) no-repeat 95% -20px;
 	color: #fff;
 	font-family: Verdana, sans-serif;
@@ -52,11 +48,11 @@
 	z-index: 60;
 }
 
-#maa-banner .open {
+#home-banner .expanded {
 	background-position: 95% 5px;
 }
 
-#maa-banner .banner-overlay {
+#home-banner .banner-overlay {
 	background: url(images/banner-overlay.png) no-repeat left top;
 	height: 385px;
 	position: relative;
@@ -64,11 +60,11 @@
 	z-index: 50;
 }
 
-#maa-banner .banner-overlay:hover {
+#home-banner .banner-overlay:hover {
 	cursor: pointer;
 }
 
-#maa-banner .text {
+#home-banner .banner-text {
 	color: #fff;
 	left: 25px;
 	position: absolute;
@@ -78,9 +74,10 @@
 	font: 40px/1 "Myriad Pro", Arial, sans-serif;
 }
 
-#maa-banner .banner-bottom {
+#home-banner #banner-bottom {
 	background: url(images/bottom-overlay.png) repeat left top;
 	background: rgba(0,0,0,0.7);
+	display: none;
 	height: 200px;
 	position: absolute;
 	top: 185px;
@@ -88,7 +85,7 @@
 	z-index: 70;
 }
 
-#maa-banner .banner-links {
+#home-banner .banner-content {
 	color: #fff;
 	font: 13px/1 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-weight: 300;
@@ -97,28 +94,29 @@
 	overflow: hidden;
 }
 
-#maa-banner .banner-links li {
+#home-banner .banner-content li,
+#home-banner .banner-content .column {
 	float: left;
 	margin-right: 25px;
 }
 
-#maa-banner .banner-links .info {
+#home-banner .banner-content .info {
 	font-size: 16px;
 	padding: 20px 50px 0 0;
 	width: 549px;
 }
-#maa-banner .banner-links .info p {
+#home-banner .banner-content .info p {
 	margin-bottom: 10px;
 }
 
-#maa-banner .banner-links a {
+#home-banner .banner-content a {
 	color: #c6daf9;
 }
-#maa-banner .banner-links a:hover {
+#home-banner .banner-content a:hover {
 	color: #993300;
 }
 
-#maa-banner .banner-links .thumb {
+#home-banner .banner-content .thumb {
 	background-position: left 20px;
 	background-repeat: no-repeat;
 	color: #fff;
@@ -132,41 +130,41 @@
 	transition: background 0.6s ease-out;
 }
 
-#maa-banner .banner-links .thumb:hover {
+#home-banner .banner-content .thumb:hover {
 	background-color: #4d4f53;
 	color: #fff;
 }
 
-#maa-banner .banner-links .arrows {
+#home-banner .banner-content .arrows {
 	background: url(images/expand-arrow.png) no-repeat 167px -52px;
 	display: block;
 	padding: 0 3px;
 	width: 100%;
 }
 
-#maa-banner .banner-links .link1 {
+#home-banner .banner-content .link1 {
 	background-image: url(images/banner-link1.jpg);
 }
-#maa-banner .banner-links .link2 {
+#home-banner .banner-content .link2 {
 	background-image: url(images/banner-link2.jpg);
 }
-#maa-banner .banner-links .link3 {
+#home-banner .banner-content .link3 {
 	background-image: url(images/banner-link3.jpg);
 }
-#maa-banner .banner-links .link4 {
+#home-banner .banner-content .link4 {
 	background-image: url(images/banner-link4.jpg);
 }
-#maa-banner .banner-links .imoe-link {
+#home-banner .banner-content .imoe-link {
 	background-image: url(images/imoe-link.jpg);
 }
-#maa-banner .banner-links .ocad-link {
+#home-banner .banner-content .ocad-link {
 	background-image: url(images/ocad-link.jpg);
 }
-#maa-banner .banner-links .naaf-link {
+#home-banner .banner-content .naaf-link {
 	background-image: url(images/naaf-thumb-link.jpg);
 }
 
-#maa-banner .banner-controls {
+#banner-controls {
 	font: 10px/2.5 Verdana, Arial, sans-serif;
 	position: absolute;
 	left: 5px;
@@ -176,42 +174,45 @@
 	z-index: 100;
 }
 
-#maa-banner .banner-controls a {
+#banner-controls a {
 	background: #226da7;
 	color: #fff;
 	padding: 5px;
 	text-decoration: none;
 }
 
-#maa-banner .banner-controls a.active,
-#maa-banner .banner-controls a:hover,
-#maa-banner .banner-expand:hover {
+#banner-controls a.active,
+#banner-controls a:hover,
+#home-banner .banner-expand:hover {
 	background-color: #999;
 	background-color: rgba(156,156,156,0.8);
 }
 
-#maa-banner .banner-controls div {
+#banner-controls div {
 	float: left;
 }
 
-#maa-banner .banner-controls li {
+#banner-controls li {
 	float: left;
 	list-style: none;
 	margin-right: 4px;
-}
-
-
-#cn-tower {
-	background: #000;
 }
 
 .info-title {
 	font-size: 18px;
 	text-transform: uppercase;
 }
+
 .imoe-line {
 	border-top: 3px solid;
 }
-.hide {
-	display: none;
+
+.hide { display: none; }
+
+.accessible {
+	height:1px;
+	overflow:hidden; 
+	position:absolute;
+	top:auto;
+	width:1px;
 }
