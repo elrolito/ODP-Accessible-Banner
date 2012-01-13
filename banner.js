@@ -178,8 +178,8 @@ initBannerEvents = function() {
 		if (bannerIndex > 0) {
 			
 			var url = '/' + bannerLang + '/' + banners[bannerIndex - 1].link;
-			alert(url);
-			window.expanded(url);
+			
+			window.open(url);
 		}
 		
 	});
