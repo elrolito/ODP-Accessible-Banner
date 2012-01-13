@@ -40,6 +40,8 @@ var banners = [
 	},
 ];
 
+var bannerIndex = 0;
+
 // init banner timer
 var bannerTimer = null;
 
@@ -72,14 +74,7 @@ $(document).ready(function() {
 	bannerLang = $('#home-banner').first().attr('lang');
 	
 	// initialize additional banner images
-	initBannerImages();
-	
-	// initialize banner events
-	initBannerEvents();
-	
-	// show banner controls
-	$('#banner-controls').find('ul').find('a').first().addClass('active');
-	$('#banner-controls').fadeIn(600);
+	initBannerImages();	
 	
 });
 
@@ -102,34 +97,35 @@ initBannerImages = function() {
 	// Add class to first banner image
 	$('#banner-backgrounds').find('.bg-image').first().addClass('showing');
 	
-	// Start the banner timer
-	startBannerTimer();
+	// initialize banner events
+	initBannerEvents();
 	
 }
 
 // all the banner events
 initBannerEvents = function() {
 	
-	// play/pause toggle
-	$('#banner-pause').click(function() {
-		
-		$(this).toggleClass('paused');
-		
-		pausePlayBanner();
-		
-		return false;
-		
-	});
-	
 	// bind click events for dynamically created controls
-	$('#banner-controls').find('ul').find('a').live('click', function() {
+	$('#banner-controls').find('a').live('click', function() {
+		
+		if ($(this).hasClass('paused')) {
+			
+			toggleBannerSlideshow('play');
+			
+			return false;
+			
+		}
 		
 		// stop current banner timer
-		clearInterval(bannerTimer);
+		toggleBannerSlideshow('pause');
 		
-		var controlIndex = $('#banner-controls').find('ul').find('a').index(this);
+		if ($(this) != $('#banner-pause')) {
 		
-		changeBanner(controlIndex);
+			bannerIndex = $('#banner-controls').find('ul').find('a').index(this);
+		
+			changeBanner(bannerIndex);
+		
+		}
 				
 		return false;
 		
@@ -177,7 +173,7 @@ initBannerEvents = function() {
 	// when banner is clicked, go to associated link
 	$('.banner-overlay').click(function() {
 		
-		var bannerIndex = getCurrentBanner();
+		bannerIndex = getCurrentBanner();
 		
 		if (bannerIndex > 0) {
 			
@@ -188,17 +184,13 @@ initBannerEvents = function() {
 		
 	});
 	
-	// pause timer while using the bottom bar
-	$('#banner-bottom').bind('mouseenter', function() {
-		// turn animation off
-		clearInterval(bannerTimer);
-		
-	}).bind('mouseleave', function() {
-		// turn animation back on
-		clearInterval(bannerTimer);
-		startBannerTimer();
-		
-	});
+	// Start the banner timer
+	startBannerTimer();
+	
+	// show banner controls
+	$('#banner-controls').fadeIn(600)
+		.find('ul').find('a').first().addClass('active');
+	
 }
 
 startBannerTimer = function() {
@@ -212,7 +204,7 @@ bannerTimerHandler = function() {
 	
 	clearInterval(bannerTimer);
 	
-	var bannerIndex = getCurrentBanner();
+	bannerIndex = getCurrentBanner();
 	
 	if (bannerIndex == banners.length) {
 		// reset to beginning
@@ -245,15 +237,21 @@ changeBanner = function(bannerIndex) {
 	
 	$(nextBanner).stop(true).fadeIn(800, function() {
 	
-		$(this).addClass('showing');	
-		startBannerTimer();
+		$(this).addClass('showing');
+		
+		if ( ! $('#banner-pause').hasClass('paused')) {	
+		
+			startBannerTimer();
+		
+		}
 		
 	});
 	
 	$('#banner-backgrounds').find('.bg-image').not(nextBanner).fadeOut(600);
 	
-	$('#banner-controls').find('ul').find('a').removeClass('active');
-	$('#banner-controls').find('ul').find('a').eq(bannerIndex).toggleClass('active');
+	$('#banner-controls').find('ul').find('a')
+		.removeClass('active')
+		.eq(bannerIndex).toggleClass('active');
 	
 	// change the bottom links for related banner
 	if (bannerIndex == 0) {
@@ -269,6 +267,7 @@ changeBanner = function(bannerIndex) {
 	if (expandedContent != $('.banner-content:visible').attr('rel')) {
 	
 		$('.banner-content').fadeOut(600);
+		
 		$('#banner-bottom [rel=' + expandedContent + ']').fadeIn(600);
 		
 	}
@@ -283,32 +282,25 @@ updateBannerText = function(banner) {
 		$(this).text($(banner).attr('title')).fadeIn(500);
 		
 	});
-	
-	// toggle text
-	if ($('#banner-pause').text() == controlText[bannerLang].play) {
-	
-		$('#banner-pause').text(controlText[bannerLang].pause);
-		
-	}
 
 }
 
 // toggle bannerTimer
-pausePlayBanner = function() {
+toggleBannerSlideshow = function(status) {
 	
 	var pButton = $('#banner-pause');
 	
-	if ($(pButton).text() == controlText[bannerLang].play) {
+	if (status == 'play') {
 		// start banner timer again
-		bannerTimer = setInterval('bannerTimerHandler()', 5000);
+		startBannerTimer();
 		
-		$(pButton).text(controlText[bannerLang].pause);
+		$(pButton).removeClass('paused').text(controlText[bannerLang].pause);
 		
-	} else {
+	} else if (status == 'pause') {
 		// stop timer
 		clearInterval(bannerTimer);
 		
-		$(pButton).text(controlText[bannerLang].play);
+		$(pButton).addClass('paused').text(controlText[bannerLang].play);
 		
 	}
 	
