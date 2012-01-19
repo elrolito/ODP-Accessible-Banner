@@ -30,12 +30,12 @@ var banners = [
 		}
 	},
 	{
-		image: 'images/naaf-banner.jpg',
+		image: 'images/nrf-banner.jpg',
 		link: 'youth/youth.asp',
-		expandedContent: 'naaf',
+		expandedContent: 'nrf',
 		title: {
-			english: 'Aboriginal Achievement',
-			francais: 'réalisations autochtones',
+			english: 'New Relationship Fund',
+			francais: 'New Relationship Fund',
 		}
 	},
 ];
@@ -139,14 +139,19 @@ initBannerEvents = function() {
 		var expandButton = $('#home-banner .banner-expand');
 		
 		if ($(expandButton).hasClass('expanded')) {
+		
+			// stop current banner timer
+			toggleBannerSlideshow('pause');
 			
-			$('#home-banner #banner-bottom').css('display', 'block');
+			$('#banner-bottom').find('.showing').fadeIn(300);
 			
 			$(expandButton).text(controlText[bannerLang].close);
 			
 		} else {
 		
 			$(expandButton).text(controlText[bannerLang].expand);
+			
+			toggleBannerSlideshow('play');
 			
 		}
 		
@@ -161,7 +166,7 @@ initBannerEvents = function() {
 				$(expandButton).attr("aria-expanded","true"); // add aria: this tells the browser / screen reader this area is expanded
 			} else {
 				$(expandButton).attr("aria-expanded","false"); // aria closed
-				$('#home-banner #banner-bottom').css('display', 'none'); // hide bottom area do that it can't be tabbed to when closed (for browsers who snap-shot the page the banner is shown at first)
+				$('#banner-bottom').find('.banner-content').css('display', 'none'); // hide bottom area do that it can't be tabbed to when closed (for browsers who snap-shot the page the banner is shown at first)
 			}
 			
 		});
@@ -265,13 +270,9 @@ changeBanner = function(bannerIndex) {
 	}
 	
 	// toggle banners associated bottom bar content
-	if (expandedContent != $('.banner-content:visible').attr('rel')) {
-	
-		$('.banner-content').fadeOut(300);
+	$('#banner-bottom').find('.banner-content').removeClass('showing').fadeOut(300);
+	$('#banner-bottom').find('[rel=' + expandedContent + ']').addClass('showing').fadeIn(300);
 		
-		$('#banner-bottom [rel=' + expandedContent + ']').fadeIn(300);
-		
-	}
 }
 
 // update banner title from title attribute
@@ -281,6 +282,9 @@ updateBannerText = function(banner) {
 	
 		$(this).text($(banner).attr('title')).fadeIn(500);
 		
+		var dY = (185 - $(this).height())/2;
+		
+		$(this).css('top', dY);
 	});
 
 }
