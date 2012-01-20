@@ -9,6 +9,7 @@
  *     { image: path, link: path, expandedContent: name, title: { english: string, francais: string } }
  * 
  * note: does not include fallback banner, which is contained in the html
+ * DO NOT include trailing commas or IE will throw a fit... typical.
 */
 var banners = [
 	{
@@ -17,7 +18,7 @@ var banners = [
 		expandedContent: 'imoe',
 		title: {
 			english: 'Aboriginal Youth',
-			francais: 'les jeunes autochtones',
+			francais: 'les jeunes autochtones'
 		}
 	},
 	{
@@ -26,21 +27,24 @@ var banners = [
 		expandedContent: 'ocad',
 		title: {
 			english: 'Featured Artists',
-			francais: 'Artistes en vedette',
+			francais: 'Artistes en vedette'
 		}
 	},
 	{
 		image: 'images/nrf-banner.jpg',
-		link: 'youth/youth.asp',
+		link: 'policy/nrf/nrf.asp',
 		expandedContent: 'nrf',
 		title: {
 			english: 'New Relationship Fund',
-			francais: 'New Relationship Fund',
+			francais: 'Fonds pour les nouvelles relations'
 		}
-	},
+	}
 ];
 
 var bannerIndex = 0;
+
+// banner pause status
+var bannerIsPaused = true;
 
 // init banner timer
 var bannerTimer = null;
@@ -87,7 +91,9 @@ initBannerImages = function() {
 		var bannerImage = new Image();
 		bannerImage.src = banner.image;
 		
-		$('#banner-backgrounds').append($(bannerImage).addClass('bg-image').attr('title', banner.title[bannerLang]));
+		$(bannerImage).attr('title', banner.title[bannerLang])
+			.addClass('bg-image')
+			.appendTo('#banner-backgrounds');
 		
 		// add controls
 		$('#banner-controls').find('ul').append('<li><a href="#"><span class="accessible">go to slide</span>' + (index + 2) + '</a></li>');
@@ -105,28 +111,39 @@ initBannerImages = function() {
 // all the banner events
 initBannerEvents = function() {
 	
+	var bannerControls = $('#banner-controls').find('ul').find('a');
+	
 	// bind click events for dynamically created controls
-	$('#banner-controls').find('a').live('click', function() {
+	$(bannerControls).live('click', function() {
 		
-		if ($(this).hasClass('paused')) {
+		// don't do anything if already active
+		if ( ! $(this).hasClass('active')) {
 			
-			toggleBannerSlideshow('play');
+			// stop current banner timer
+			toggleBannerSlideshow('pause');
 			
-			return false;
+			bannerIndex = $(bannerControls).index(this);
 			
-		}
-		
-		// stop current banner timer
-		toggleBannerSlideshow('pause');
-		
-		if ($(this) != $('#banner-pause')) {
-		
-			bannerIndex = $('#banner-controls').find('ul').find('a').index(this);
-		
 			changeBanner(bannerIndex);
 		
 		}
 				
+		return false;
+		
+	});
+	
+	$('#banner-pause').click(function() {
+	
+		if ($(this).hasClass('paused')) {
+			
+			toggleBannerSlideshow('play');
+			
+		} else {
+			
+			toggleBannerSlideshow('pause');
+			
+		}
+		
 		return false;
 		
 	});
@@ -162,11 +179,17 @@ initBannerEvents = function() {
 		}, 600, 'swing', function() {
 			
 			if ($(expandButton).hasClass('expanded')) {
+				// add aria: this tells the browser / screen reader this area is expanded
+				$(expandButton).attr("aria-expanded","true");
 				
-				$(expandButton).attr("aria-expanded","true"); // add aria: this tells the browser / screen reader this area is expanded
 			} else {
-				$(expandButton).attr("aria-expanded","false"); // aria closed
-				$('#banner-bottom').find('.banner-content').css('display', 'none'); // hide bottom area do that it can't be tabbed to when closed (for browsers who snap-shot the page the banner is shown at first)
+				// aria closed
+				$(expandButton).attr("aria-expanded","false");
+				
+				// hide bottom area do that it can't be tabbed to when closed 
+				//(for browsers who snap-shot the page the banner is shown at first)
+				$('#banner-bottom').find('.banner-content').css('display', 'none');
+				
 			}
 			
 		});
@@ -199,27 +222,35 @@ initBannerEvents = function() {
 }
 
 startBannerTimer = function() {
+	
 	// set banner timer interval
 	bannerTimer = setInterval('bannerTimerHandler()', bannerTimeDelay);
+	
+	bannerIsPaused = false;
 	
 }
 
 // bannerTimer interval handler
 bannerTimerHandler = function() {
 	
-	clearInterval(bannerTimer);
+	// only do this if the banner is actually playing
+	if ( ! bannerIsPaused) {
+		
+		clearInterval(bannerTimer);
+		
+		bannerIndex = getCurrentBanner();
+		
+		if (bannerIndex == banners.length) {
+			// reset to beginning
+			bannerIndex = 0;
+		} else {
+			// increase counter to go to next banner
+			bannerIndex++;
+		}
+		
+		changeBanner(bannerIndex);
 	
-	bannerIndex = getCurrentBanner();
-	
-	if (bannerIndex == banners.length) {
-		// reset to beginning
-		bannerIndex = 0;
-	} else {
-		// increase counter to go to next banner
-		bannerIndex++;
 	}
-	
-	changeBanner(bannerIndex);
 	
 }
 
@@ -252,8 +283,10 @@ changeBanner = function(bannerIndex) {
 		
 	});
 	
+	// fade out the remaining banners
 	$('#banner-backgrounds').find('.bg-image').not(nextBanner).fadeOut(600);
 	
+	// toggle banner controls to active banner
 	$('#banner-controls').find('ul').find('a')
 		.removeClass('active')
 		.eq(bannerIndex).toggleClass('active');
@@ -261,30 +294,34 @@ changeBanner = function(bannerIndex) {
 	// change the bottom links for related banner
 	if (bannerIndex == 0) {
 		// fallback banner from html
-		expandedContent = 'default';
+		expandedContentRel = 'default';
 		
 	} else {
 		// adjusted to not include the fallback banner
-		expandedContent = banners[bannerIndex - 1]['expandedContent'];
+		expandedContentRel = banners[bannerIndex - 1]['expandedContent'];
 		
 	}
 	
 	// toggle banners associated bottom bar content
 	$('#banner-bottom').find('.banner-content').removeClass('showing').fadeOut(300);
-	$('#banner-bottom').find('[rel=' + expandedContent + ']').addClass('showing').fadeIn(300);
+	$('#banner-bottom').find('[rel=' + expandedContentRel + ']').addClass('showing').fadeIn(300);
 		
 }
 
 // update banner title from title attribute
 updateBannerText = function(banner) {
 
-	$('.banner-overlay .banner-text').fadeOut(500, function() {
-	
-		$(this).text($(banner).attr('title')).fadeIn(500);
+	$('.banner-text').fadeOut(500, function() {
+		//get title from banner
+		$(this).text($(banner).attr('title'));
 		
+		// adjust the vertical positioning of taller titles
 		var dY = (185 - $(this).height())/2;
 		
 		$(this).css('top', dY);
+		
+		$(this).fadeIn(500);
+		
 	});
 
 }
@@ -303,6 +340,8 @@ toggleBannerSlideshow = function(status) {
 	} else if (status == 'pause') {
 		// stop timer
 		clearInterval(bannerTimer);
+		
+		bannerIsPaused = true;
 		
 		$(pButton).addClass('paused').text(controlText[bannerLang].play);
 		
