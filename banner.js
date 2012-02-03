@@ -61,13 +61,13 @@ var controlText = {
 		play: 'Play',
 		pause: 'Pause',
 		expand: 'Expand',
-		close: 'Close',
+		close: 'Close'
 	},
 	francais: {
 		play: 'Jouer',
 		pause: 'Pause',
 		expand: 'Agrandir',
-		close: 'Fermer',
+		close: 'Fermer'
 	}
 }
 
